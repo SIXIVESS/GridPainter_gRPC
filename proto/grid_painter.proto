@@ -1,0 +1,55 @@
+syntax = "proto3";
+
+package gridpainter;
+
+// Servicio que expone el modelo "Grid Painter" a traves de gRPC.
+
+service GridPainterService {
+  // Ejecuta una simulacion completa con el tipo de agente indicado
+  // y retorna el resultado
+
+  rpc RunSimulation (SimulationRequest) returns (SimulationResponse);
+
+  // Ejecuta N simulaciones de ambos agentes y retorna el promedio de pasos de cada uno.
+  rpc CompareAgents (CompareRequest) returns (CompareResponse);
+}
+
+// Tipo de agente a utilizar.
+enum BrainType {
+  REACTIVE = 0;    // SimpleReactiveBrain: movimiento aleatorio, sin memoria
+  MODEL_BASED = 1;  // ModelBasedBrain: ruta en zigzag, con memoria
+}
+
+message SimulationRequest {
+  BrainType brain_type = 1;
+  int32 rows = 2;
+  int32 cols = 3;
+  int32 max_steps = 4;
+  bool record_path = 5; // si es true, se retorna el recorrido completo
+}
+
+message Position {
+  int32 row = 1;
+  int32 col = 2;
+}
+
+message SimulationResponse {
+  int32 steps = 1;
+  int32 painted_cells = 2;
+  int32 total_cells = 3;
+  bool completed = 4;
+  repeated Position path = 5; // vacio si record_path=false
+}
+
+message CompareRequest {
+  int32 rows = 1;
+  int32 cols = 2;
+  int32 trials = 3;
+}
+
+message CompareResponse {
+  int32 trials = 1;
+  double avg_reactive_steps = 2;
+  double avg_modelbased_steps = 3;
+  double improvement_pct = 4;
+}
