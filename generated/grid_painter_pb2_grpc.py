@@ -26,8 +26,18 @@ if _version_not_supported:
 
 
 class GridPainterServiceStub:
-    def __init__(self, channel):
+    """Servicio que expone el modelo "Grid Painter" a traves de gRPC.
 
+    Ejecuta una simulacion completa con el tipo de agente indicado
+    y retorna el resultado
+    """
+
+    def __init__(self, channel):
+        """Constructor.
+
+        Args:
+            channel: A grpc.Channel.
+        """
         self.RunSimulation = channel.unary_unary(
                 '/gridpainter.GridPainterService/RunSimulation',
                 request_serializer=grid__painter__pb2.SimulationRequest.SerializeToString,
@@ -41,12 +51,21 @@ class GridPainterServiceStub:
 
 
 class GridPainterServiceServicer:
+    """Servicio que expone el modelo "Grid Painter" a traves de gRPC.
+
+    Ejecuta una simulacion completa con el tipo de agente indicado
+    y retorna el resultado
+    """
+
     def RunSimulation(self, request, context):
+        """Missing associated documentation comment in .proto file."""
         context.set_code(grpc.StatusCode.UNIMPLEMENTED)
         context.set_details('Method not implemented!')
         raise NotImplementedError('Method not implemented!')
 
     def CompareAgents(self, request, context):
+        """Ejecuta N simulaciones de ambos agentes y retorna el promedio de pasos de cada uno.
+        """
         context.set_code(grpc.StatusCode.UNIMPLEMENTED)
         context.set_details('Method not implemented!')
         raise NotImplementedError('Method not implemented!')
@@ -71,7 +90,14 @@ def add_GridPainterServiceServicer_to_server(servicer, server):
     server.add_registered_method_handlers('gridpainter.GridPainterService', rpc_method_handlers)
 
 
+ # This class is part of an EXPERIMENTAL API.
 class GridPainterService:
+    """Servicio que expone el modelo "Grid Painter" a traves de gRPC.
+
+    Ejecuta una simulacion completa con el tipo de agente indicado
+    y retorna el resultado
+    """
+
     @staticmethod
     def RunSimulation(request,
             target,
